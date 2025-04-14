@@ -9,9 +9,14 @@ class NoteBase(BaseModel):
 class CreateNote(NoteBase):
     pass
 
-class NoteResponse(NoteBase):
-    id: int
-    owner: str
+class UpdateNote(NoteBase):
+    title: Optional[str] | None = None
+    content: Optional[str] | None = None
+    
+class NoteResponse(BaseModel):
+    id:int
+    title: str
+    content: str
     created_at: datetime
     
     class Config:

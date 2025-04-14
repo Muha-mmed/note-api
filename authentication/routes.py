@@ -3,7 +3,7 @@ from fastapi import APIRouter,Depends, HTTPException
 from authentication.auth import JWTBearer, create_access_token, create_refresh_token, get_current_user
 from authentication.models import User
 from authentication.schemas import Create_User
-from authentication.service import create_user_svc,loginUser_svc,existing_user
+from authentication.service import create_user_svc, delete_user_svc,loginUser_svc,existing_user
 
 
 from sqlalchemy.orm import Session
@@ -51,3 +51,8 @@ def refresh_token(token:str):
 @auth_route.get("/user", status_code=200,dependencies=[Depends(JWTBearer())])
 def get_current_user_info(current_user: User = Depends(get_current_user)):
     return current_user
+
+@auth_route.delete("/delete/user",dependencies=[Depends(JWTBearer())])
+def delete_user(user: User = Depends(get_current_user),db:Session=Depends(get_db)):
+    delete_user_svc(user,db)
+    return {"message": "user deleted"}

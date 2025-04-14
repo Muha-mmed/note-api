@@ -28,3 +28,9 @@ def loginUser_svc(email:str,password:str,db:Session):
     if not user or not verify_password(password,user.password):
         return None    
     return {"message": "user login successfully"}
+
+def delete_user_svc(user:User,db:Session):
+    current_user = existing_user(user.email,db)
+    db.delete(current_user)
+    db.commit()
+    return {"message": "user deleted"}

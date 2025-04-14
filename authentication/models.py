@@ -1,8 +1,6 @@
 from sqlalchemy import Integer,String,Boolean,DateTime,Column,func,UUID
 from sqlalchemy.orm import relationship
 from db import Base,engine
-from uuid import uuid4
-
 
 class User(Base):
     __tablename__ = "users"
