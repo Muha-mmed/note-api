@@ -23,10 +23,21 @@ def get_note_svc(user: User,db:Session):
         return {"message": "No note yet try add one"}
     return note
 
-def update_note_svc(note_data:UpdateNote,note_id:int,db:Session):
+def update_note_svc(note_data:UpdateNote,user:User,note_id:int,db:Session):
+    current_user =db.query(User).filter(User.email == user.email).first()
     note = db.query(Note).filter(Note.id == note_id).first()
-    new_note = .
+    if current_user.email != note.owner_email:
+        return {"message": "not the creator"}
+
+    new_note = note_data.model_dump(exclude_unset = True)
+    for key,value in new_note.items():
+        setattr(note,key,value)
+    db.commit()
+    db.refresh(note)
+    return note
     
+    
+
 def delete_note_svc(note_id:int,user:User,db:Session):
     c_user = db.query(User).filter(User.email == user.email).first()
     note = db.query(Note).filter(Note.id == note_id).first()
